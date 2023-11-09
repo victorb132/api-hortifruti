@@ -5,6 +5,9 @@ Route.post('/logout', 'AuthController.logout');
 
 Route.post('/cliente/cadastro', 'ClientController.store');
 
+Route.get('/cities', 'CitiesController.index');
+Route.get('/cities/:id/companies', 'CitiesController.companies');
+
 Route.group(() => {
   Route.get('/auth/me', 'AuthController.me');
 
