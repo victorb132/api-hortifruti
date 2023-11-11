@@ -4,7 +4,7 @@ import City from 'App/Models/City'
 export default class CitiesController {
   public async index({ response }: HttpContextContract) {
     const cities = await City.query().whereHas('companies', (query: any) => {
-      query.where('active', false)
+      query.where('blocked', false)
     }).preload('state');
 
     return response.ok(cities);
