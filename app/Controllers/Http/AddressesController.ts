@@ -36,4 +36,29 @@ export default class AddressesController {
 
     return response.ok(getClient.addresses);
   }
+
+  public async update({ request, response, params }: HttpContextContract) {
+    const payload = await request.validate(CreateEditAddressValidator);
+    const address = await Address.findOrFail(params.id);
+
+    address.merge(payload);
+
+    await address.save();
+
+    return response.ok(address);
+  }
+
+  public async destroy({ response, params }: HttpContextContract) {
+    try {
+      const resp = await Address.query().where('id', params.id).delete();
+
+      if (resp.includes(1)) {
+        return response.noContent();
+      } else {
+        return response.notFound();
+      }
+    } catch (error) {
+      return response.badRequest()
+    }
+  }
 }
