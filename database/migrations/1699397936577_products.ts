@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.string('description').nullable();
       table.string('image').nullable();
       table.decimal('price', 10, 2).notNullable();
-      table.string('unit', 3).notNullable();
+      table.string('unity', 3).notNullable();
       table.string('position').notNullable();
       table.boolean('active').notNullable().defaultTo(true);
       table.integer('category_id').notNullable().unsigned()

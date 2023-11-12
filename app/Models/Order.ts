@@ -1,5 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, HasOne, column, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import Client from './Client'
+import OrderStatus from './OrderStatus'
+import Company from './Company'
+import OrderProduct from './OrderProduct'
+import Address from './Address'
+import SupplyPayment from './SupplyPayment'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true, serializeAs: null })
@@ -18,7 +24,7 @@ export default class Order extends BaseModel {
   public supply_payment_id: number
 
   @column()
-  public addres_order_id: number
+  public address_order_id: number
 
   @column()
   public value: number
@@ -35,4 +41,45 @@ export default class Order extends BaseModel {
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
+  @hasOne(() => Client, {
+    foreignKey: 'id',
+    localKey: 'client_id'
+  })
+
+  public client: HasOne<typeof Client>
+
+  @hasMany(() => OrderStatus, {
+    foreignKey: 'order_id',
+    localKey: 'id'
+  })
+
+  public order_status: HasMany<typeof OrderStatus>
+
+  @hasOne(() => Company, {
+    foreignKey: 'id',
+    localKey: 'company_id'
+  })
+
+  public company: HasOne<typeof Company>
+
+  @hasMany(() => OrderProduct, {
+    foreignKey: 'order_id',
+    localKey: 'id'
+  })
+
+  public products: HasMany<typeof OrderProduct>
+
+  @hasOne(() => Address, {
+    foreignKey: 'id',
+    localKey: 'address_order_id'
+  })
+
+  public address: HasOne<typeof Address>
+
+  @hasOne(() => SupplyPayment, {
+    foreignKey: 'id',
+    localKey: 'supply_payment_id'
+  })
+
+  public supply_payment: HasOne<typeof SupplyPayment>
 }

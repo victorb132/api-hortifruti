@@ -6,6 +6,9 @@ export default class AddressOrder extends BaseModel {
   public id: number
 
   @column()
+  public cityId: number;
+
+  @column()
   public street: string
 
   @column()

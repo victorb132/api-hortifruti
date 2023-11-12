@@ -66,7 +66,7 @@ export default class ClientController {
     } catch (error) {
       await trx.rollback();
 
-      return response.badRequest('Something in the request is wrong');
+      return response.badRequest('Something in the request is wrong', error);
     }
   }
 }

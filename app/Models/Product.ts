@@ -12,7 +12,7 @@ export default class Product extends BaseModel {
   public description: string | null
 
   @column()
-  public position: string
+  public position: number
 
   @column()
   public active: boolean
