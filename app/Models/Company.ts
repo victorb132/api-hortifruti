@@ -33,7 +33,7 @@ export default class Company extends BaseModel {
   public categories: HasMany<typeof Category>
 
   @manyToMany(() => SupplyPayment, {
-    pivotTable: 'supply_payments_companies',
+    pivotTable: 'company_supply_payments',
     localKey: 'id',
     pivotForeignKey: 'company_id',
     relatedKey: 'id',

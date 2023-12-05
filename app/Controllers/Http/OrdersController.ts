@@ -61,9 +61,9 @@ export default class OrdersController {
         totalValue += prod.price * product.quantity;
       }
 
-      totalValue = compCity ? totalValue + compCity?.delivery_cost : totalValue;
-
-      totalValue = parseFloat(totalValue.toFixed(2));
+      totalValue = compCity
+        ? totalValue + compCity.delivery_cost
+        : totalValue;
 
       if (payload.change_to != null && payload.change_to < totalValue) {
         trx.rollback();
@@ -87,7 +87,7 @@ export default class OrdersController {
 
         await OrderProduct.create({
           order_id: order.id,
-          product_id: product.id,
+          product_id: product.product_id,
           value: getProduct.price,
           quantity: product.quantity,
           observation: product.observation,
