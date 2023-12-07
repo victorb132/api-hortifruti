@@ -140,6 +140,8 @@ export default class OrdersController {
       })
       .first();
 
+    console.log(order)
+
     if (order == null) {
       return response.notFound('Pedido não encontrado')
     }

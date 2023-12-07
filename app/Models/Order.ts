@@ -6,6 +6,7 @@ import Company from './Company'
 import OrderProduct from './OrderProduct'
 import Address from './Address'
 import SupplyPayment from './SupplyPayment'
+import AddressOrder from './AddressOrder'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true, serializeAs: null })
@@ -69,12 +70,12 @@ export default class Order extends BaseModel {
 
   public products: HasMany<typeof OrderProduct>
 
-  @hasOne(() => Address, {
+  @hasOne(() => AddressOrder, {
     foreignKey: 'id',
     localKey: 'address_order_id'
   })
 
-  public address: HasOne<typeof Address>
+  public address: HasOne<typeof AddressOrder>
 
   @hasOne(() => SupplyPayment, {
     foreignKey: 'id',
