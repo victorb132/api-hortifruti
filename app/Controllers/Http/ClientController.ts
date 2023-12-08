@@ -12,7 +12,7 @@ export default class ClientController {
     const user = await User.create({
       email: payload.email,
       password: payload.password,
-      type: 'clients',
+      type: 'client',
     })
 
     const client = await Client.create({
@@ -21,7 +21,12 @@ export default class ClientController {
       userId: user.id
     })
 
-    return response.ok(client);
+    return response.ok({
+      id: client.id,
+      name: client.name,
+      email: user.email,
+      phone: client.phone,
+    });
   }
 
   public async update({ request, response, auth }: HttpContextContract) {
