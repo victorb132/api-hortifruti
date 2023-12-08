@@ -53,7 +53,7 @@
     "picomatch" "^2.3.1"
     "slash" "^3.0.0"
 
-"@adonisjs/auth@^8.2.3":
+"@adonisjs/auth@^8.0.0", "@adonisjs/auth@^8.2.3":
   "integrity" "sha512-js9e8AHEsNC/8MGvho6MgL+uXr8SlhTg9MJJDWQBBiqsKkT7+H7NMP/pLbuSzYaaf40t2u/OXfq6wXuIC5ZYvw=="
   "resolved" "https://registry.npmjs.org/@adonisjs/auth/-/auth-8.2.3.tgz"
   "version" "8.2.3"
@@ -75,6 +75,13 @@
     "fs-extra" "^10.1.0"
     "media-typer" "^1.1.0"
     "slash" "^3.0.0"
+
+"@adonisjs/bouncer@^2.3.0":
+  "integrity" "sha512-wJTIgIkDXtUyeCJGX/iV/EdrLQAuIU0YSwl8Lxn7hcYec9VbsMJ5aYIXeSNtOqECNqVm7KFdzyJiOEij9Luoqg=="
+  "resolved" "https://registry.npmjs.org/@adonisjs/bouncer/-/bouncer-2.3.0.tgz"
+  "version" "2.3.0"
+  dependencies:
+    "@poppinss/utils" "^4.0.4"
 
 "@adonisjs/config@^3.0.9":
   "integrity" "sha512-f+wzrc+0HLvhJyYGEMV2QTHtyJ8sI3PKvH9h/baW/iF8UO3KF+llHH0Cf3/M5dYnpdz9rnmj0VtdTaIDfxrgGg=="

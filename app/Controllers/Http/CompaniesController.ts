@@ -3,6 +3,9 @@ import CitiesCompany from 'App/Models/CitiesCompany';
 import City from 'App/Models/City';
 import Company from 'App/Models/Company';
 import Order from 'App/Models/Order';
+import User from 'App/Models/User';
+import UpdateCompanyValidator from 'App/Validators/UpdateCompanyValidator';
+import Drive from '@ioc:Adonis/Core/Drive';
 
 export default class CompaniesController {
   public async orders({ response, auth }: HttpContextContract) {
@@ -16,7 +19,7 @@ export default class CompaniesController {
       .preload('order_status', (statusQuery) => {
         statusQuery.preload('status');
       })
-      .orderBy('order_id', 'desc');
+      .orderBy('id', 'desc');
 
     return response.json(orders);
   }
@@ -39,7 +42,9 @@ export default class CompaniesController {
     const company = await Company.query()
       .where('id', idComp)
       .preload('categories', (categoryQuery) => {
-        categoryQuery.preload('products');
+        categoryQuery.preload('products', (productsQuery) => {
+          productsQuery.whereNull('deleted_at');
+        });
       })
       .preload('supplypayments')
       .firstOrFail();
@@ -54,6 +59,64 @@ export default class CompaniesController {
       supply_payments: company.supplypayments,
       categories: company.categories,
     })
+  }
 
+  public async update({ request, auth, bouncer, response }: HttpContextContract) {
+    await bouncer.authorize('UserIsCompany');
+
+    const payload = await request.validate(UpdateCompanyValidator);
+
+    const userAuth = await auth.use('api').authenticate();
+
+    const user = await User.findOrFail(userAuth.id);
+    const company = await Company.findByOrFail('user_id', user.id);
+
+    if (payload.name !== undefined) company.name = payload.name;
+    if (payload.online !== undefined) company.online = payload.online;
+    if (payload.email !== undefined) user.email = payload.email;
+    if (payload.password !== undefined) user.password = payload.password;
+    if (payload.logo !== undefined) {
+      await payload.logo?.moveToDisk('./');
+      company.logo = await Drive.getUrl(payload.logo?.fileName!);
+    }
+
+    await company.save()
+    await user.save()
+
+    const getEstUpdated = await Company.findByOrFail(
+      "user_id",
+      user.id
+    );
+
+    const data = {
+      company_id: getEstUpdated.id,
+      name: getEstUpdated.name,
+      logo: getEstUpdated.logo,
+      online: getEstUpdated.online,
+      blocked: getEstUpdated.blocked,
+      email: user.email,
+    };
+
+    return response.ok(data);
+  }
+
+  public async removeLogo({ auth, bouncer, response }: HttpContextContract) {
+    await bouncer.authorize("UserIsCompany");
+
+    const userAuth = await auth.use("api").authenticate();
+    const company = await Company.findByOrFail(
+      "user_id",
+      userAuth.id
+    );
+
+    if (company.logo) {
+      const file = company.logo.split("/").filter(Boolean).pop();
+      if (file?.length) await Drive.delete(file);
+
+      company.logo = null;
+      await company.save();
+    }
+
+    return response.noContent();
   }
 }

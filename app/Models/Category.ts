@@ -10,7 +10,7 @@ export default class Category extends BaseModel {
   public name: string
 
   @column()
-  public description: string
+  public description: string | null
 
   @column()
   public position: number

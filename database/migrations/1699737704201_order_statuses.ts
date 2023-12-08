@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .inTable('orders');
       table.integer('status_id').unsigned().notNullable().references('id').inTable('statuses');
       table.string('observation').nullable();
-      table.timestamp('created_at').notNullable()
+      table.timestamp('created_at').nullable()
       table.primary(['order_id', 'status_id'])
     })
   }

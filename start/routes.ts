@@ -18,10 +18,30 @@ Route.group(() => {
   Route.post('/pedidos', 'OrdersController.store');
   Route.get('/pedidos', 'OrdersController.index');
   Route.get('/pedidos/:hash_id', 'OrdersController.show');
-
-  Route.get('/estabelecimentos/pedidos', 'CompaniesController.orders');
+  Route.post('/pedidos/:hash_id/statuses', 'OrdersController.statuses');
 
   Route.put('/cliente', 'ClientController.update');
+
+  // Estabelecimentos
+  Route.get('/estabelecimentos/pedidos', 'CompaniesController.orders');
+  Route.patch('estabelecimento', 'CategoriesController.update');
+  Route.delete('/estabelecimento/produtos/:id/imagem', 'ProductsController.removeImage');
+  Route.delete('/estabelecimento/logo', 'CompaniesController.removeLogo');
+
+  Route.resource("/estabelecimento/categorias", "CategoriesController").only([
+    "store",
+    "index",
+    "update",
+    "destroy",
+  ]);
+
+
+  Route.resource('/produtos', 'ProductsController').only([
+    'store',
+    'index',
+    'update',
+    'destroy'
+  ]);
 }).middleware('auth');
 
 Route.get('/', async () => {

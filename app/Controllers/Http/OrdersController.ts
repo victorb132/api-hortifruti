@@ -8,7 +8,9 @@ import Order from 'App/Models/Order';
 import OrderProduct from 'App/Models/OrderProduct';
 import OrderStatus from 'App/Models/OrderStatus';
 import Product from 'App/Models/Product';
+import Status from 'App/Models/Status';
 import CreateOrderValidator from 'App/Validators/CreateOrderValidator';
+import UpdateOrderValidator from 'App/Validators/UpdateOrderValidator';
 var randomString = require('randomstring');
 
 export default class OrdersController {
@@ -147,5 +149,32 @@ export default class OrdersController {
     }
 
     return response.ok(order);
+  }
+
+  public async statuses({ params, request, bouncer, response }: HttpContextContract) {
+    await bouncer.authorize('UserIsCompany')
+
+    const payload = await request.validate(UpdateOrderValidator);
+
+    const order = await Order.query().where('hash_id', params.hash_id).firstOrFail();
+
+    await bouncer.with('OrderPolicy').authorize('canUpdate', order);
+
+    const orderStatus = await OrderStatus.query().select('status_id').where('order_id', order.id).orderBy('status_id', 'desc').firstOrFail();
+
+    // orderStatus.status_id == 4
+
+    if (payload.status_id <= orderStatus.status_id) {
+      return response.badRequest(`Status enviado é inválido. Status_id atual: ${orderStatus.status_id}`);
+    }
+
+    const status = await Status.findOrFail(payload.status_id);
+
+    await OrderStatus.create({
+      order_id: order.id,
+      status_id: status.id,
+    })
+
+    return response.ok(`Pedido ${order.hash_id} foi ${status.status}`);
   }
 }

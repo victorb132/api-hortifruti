@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "node ace serve --watch",
-    "build": "node ace build --production",
+    "build:local": "node ace build --production",
+    "build": "node ace build --production && cp .env build/.env && cd build/ && yarn install --production && echo '>>>>>>>>>>>>>> ATUALIZE AGORA o: PM2 ex: pm2 reload 3 <<<<<<<<<<<<<",
     "start": "node server.js",
     "test": "node ace test"
   },
@@ -23,6 +24,7 @@
   },
   "dependencies": {
     "@adonisjs/auth": "^8.2.3",
+    "@adonisjs/bouncer": "^2.3.0",
     "@adonisjs/core": "^5.8.0",
     "@adonisjs/lucid": "^18.4.2",
     "@adonisjs/repl": "^3.1.0",

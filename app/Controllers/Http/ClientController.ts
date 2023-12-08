@@ -29,7 +29,7 @@ export default class ClientController {
     });
   }
 
-  public async update({ request, response, auth }: HttpContextContract) {
+  public async update({ request, response, auth, bouncer }: HttpContextContract) {
     const payload = await request.validate(EditClientValidator);
     const userAuth = await auth.use('api').authenticate();
 
@@ -38,6 +38,8 @@ export default class ClientController {
     try {
       const user = await User.findByOrFail('id', userAuth.id);
       const client = await Client.findByOrFail('user_id', user.id);
+
+      await bouncer.with('ClientPolicy').authorize('canUpdate', client);
 
       if (payload.password) {
         user.merge({

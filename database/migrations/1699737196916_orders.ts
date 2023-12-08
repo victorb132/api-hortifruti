@@ -35,7 +35,7 @@ export default class extends BaseSchema {
       table.decimal('change_to', 10, 2).nullable();
       table.decimal('delivery_cost', 10, 2).notNullable();
       table.string('observation').nullable();
-      table.timestamp('created_at').notNullable();
+      table.timestamp('created_at').nullable();
     })
   }
 

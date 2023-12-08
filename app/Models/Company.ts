@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, HasMany, ManyToMany, column, hasMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Category from './Category'
 import SupplyPayment from './SupplyPayment'
+import Env from '@ioc:Adonis/Core/Env'
 
 export default class Company extends BaseModel {
   @column({ isPrimary: true })
@@ -12,6 +13,10 @@ export default class Company extends BaseModel {
 
   @column()
   public name: string
+
+  @column({
+    consume: (value) => (value == null ? value : Env.get('API_URL') + value)
+  })
 
   @column()
   public logo: string | null
